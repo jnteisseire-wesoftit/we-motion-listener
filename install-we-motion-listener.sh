@@ -11,7 +11,7 @@ chmod +x /etc/we-motion-listener/we-motion-listener.py
 
 
 # Create the log files and lock files and set ownership and permissions
-sudo mkdir -p /var/log/we-motion-listener/
+mkdir -p /var/log/we-motion-listener/
 touch /var/log/we-motion-listener/we-motion-listener.log
 chown motion.motion /var/log/we-motion-listener/we-motion-listener.log
 chmod 664 /var/log/we-motion-listener/we-motion-listener.log
