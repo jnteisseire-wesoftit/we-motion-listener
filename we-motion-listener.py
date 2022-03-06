@@ -1,15 +1,12 @@
 #!/usr/bin/python3
 import sys
-import os.path
 import logging
 import logging.handlers
 import argparse
 
-
 from config import Config
 from smtp import SmtpAction
 from sftp import SftpAction
-from io import StringIO
 
 
 def handle_event(args):
@@ -20,15 +17,7 @@ def handle_event(args):
     # setup logger
     logger = logging.getLogger('we-motion-listener')
     logger.setLevel(logging.DEBUG)
-
-    handler = logging.StreamHandler(logging.DEBUG)
-
-    if (os.path.exists(config.config_obj.get('General', 'log'))):
-        handler = logging.handlers.RotatingFileHandler('/var/log/motion/motion.log',
-                                                       maxBytes=1048576,
-                                                       backupCount=3)
-    else:
-        handler = logging.StreamHandler(sys.stdout)
+    handler = logging.StreamHandler(sys.stdout)
 
     handler.setFormatter(logging.Formatter(
         '[WEMOTIONLISTENER] [%(asctime)s] [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
