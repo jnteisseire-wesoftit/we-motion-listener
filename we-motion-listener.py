@@ -41,7 +41,7 @@ def handle_event(args):
             config, 'Motion detected ')
     except Exception as e:
         SmtpAction.send_email(
-            config, 'Motion detected ' + e.args)
+            config, 'Motion detected ' + e)
 
 
 if __name__ == '__main__':
