@@ -18,15 +18,10 @@ class SftpAction():
         port = config.config_obj.getint('SftpAction', 'port')
         username = config.config_obj.get('SftpAction', 'username')
         remotepath = config.config_obj.get('SftpAction', 'remotepath')
+        private_key_file = config.config_obj.get(
+            'SftpAction', 'private_key_file')
 
         transport = paramiko.Transport((host, port))
-
-        if os.path.exists(os.path.expanduser('~/.ssh/id_rsa')):
-            private_key = '~/.ssh/id_rsa'
-        elif os.path.exists(os.path.expanduser('~/.ssh/id_dsa')):
-            private_key = '~/.ssh/id_dsa'
-
-        private_key_file = os.path.expanduser(private_key)
 
         try:
             xSx_key = paramiko.RSAKey.from_private_key_file(private_key_file)

@@ -17,7 +17,6 @@ class SmtpAction():
         username = config.config_obj.get('SmtpAction', 'user')
         password = config.config_obj.get('SmtpAction', 'password')
         from_name = config.config_obj.get('SmtpAction', 'name')
-        sender = config.config_obj.get('SmtpAction', 'sender')
 
         # Recipient email address (could be same as from_addr)
         recipient = config.config_obj.get('SmtpAction', 'recipient')
@@ -27,9 +26,9 @@ class SmtpAction():
 
         senddate = datetime.strftime(datetime.now(), '%Y-%m-%d')
         m = "Date: %s\r\nFrom: %s <%s>\r\nTo: %s\r\nSubject: %s\r\nX-Mailer: My-Mail\r\n\r\n" % (
-            senddate, from_name, sender, recipient, subject)
+            senddate, from_name, username, recipient, subject)
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.starttls()
         server.login(username, password)
-        server.sendmail(sender, recipient, m + msg)
+        server.sendmail(username, recipient, m + msg)
         server.quit()

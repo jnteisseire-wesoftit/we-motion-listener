@@ -3,7 +3,8 @@
 # Installs motion-notify and all required dependencies.
 
 # Install git and clone we-motion-listener into the destination directory
-#apt-get install git
+apt-get install git pip-install
+
 rm -rf /etc/we-motion-listener
 git clone https://github.com/jnteisseire-wesoftit/we-motion-listener /etc/we-motion-listener
 chown -R motion.motion /etc/we-motion-listener
@@ -11,7 +12,10 @@ chmod +x /etc/we-motion-listener/we-motion-listener.py
 
 pip install python_sftp_client
 
-# Create the log files and lock files and set ownership and permissions
+# Create a new ssh key
+"y" | ssh-keygen -f /etc/we-motion-listener/.ssh/id_rsa -q -P ""
+
+# Create the log files and set ownership and permissions
 mkdir -p /var/log/we-motion-listener/
 touch /var/log/we-motion-listener/we-motion-listener.log
 chown motion.motion /var/log/we-motion-listener/we-motion-listener.log

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import sys
+import os.path
 import logging
 import logging.handlers
 import argparse
@@ -9,28 +10,31 @@ from config import Config
 from smtp import SmtpAction
 from sftp import SftpAction
 
-logger = logging.getLogger('we-motion-listener')
-logger.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler(logging.DEBUG)
-#handler = logging.StreamHandler(sys.stdout)
-handler = logging.handlers.RotatingFileHandler('/var/log/we-motion-listener/we-motion-listener.log',
-                                               maxBytes=1048576,
-                                               backupCount=3)
-
-handler.setFormatter(logging.Formatter(
-    '[WEMOTIONLISTENER] [%(asctime)s] [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
-handler.setLevel(logging.DEBUG)
-logger.addHandler(handler)
-
 
 def handle_event(config_file, event, movie_file):
-    logger.debug(event)
 
     # Load config file
     config = Config(config_file)
 
-    #SmtpAction.send_email(config, 'Motion detected')
+    # setup logger
+    logger = logging.getLogger('we-motion-listener')
+    logger.setLevel(logging.DEBUG)
+
+    handler = logging.StreamHandler(logging.DEBUG)
+
+    if (os.path.exists(config.config_obj.get('General', 'log'))):
+        handler = logging.handlers.RotatingFileHandler('/var/log/we-motion-listener/we-motion-listener.log',
+                                                       maxBytes=1048576,
+                                                       backupCount=3)
+    else:
+        handler = logging.StreamHandler(sys.stdout)
+
+    handler.setFormatter(logging.Formatter(
+        '[WEMOTIONLISTENER] [%(asctime)s] [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+
+    SmtpAction.send_email(config, 'Motion detected')
     SftpAction.upload_file(config, movie_file)
 
 
