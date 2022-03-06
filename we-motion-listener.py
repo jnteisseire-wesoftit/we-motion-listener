@@ -11,10 +11,10 @@ from smtp import SmtpAction
 from sftp import SftpAction
 
 
-def handle_event(config_file, movie_file):
+def handle_event(args):
 
     # Load config file
-    config = Config(config_file)
+    config = Config(args.config)
 
     # setup logger
     logger = logging.getLogger('we-motion-listener')
@@ -34,19 +34,20 @@ def handle_event(config_file, movie_file):
     handler.setLevel(logging.DEBUG)
     logger.addHandler(handler)
 
-    SmtpAction.send_email(config, 'Motion detected')
-    SftpAction.upload_file(config, movie_file)
+    SmtpAction.send_email(config, 'Motion detected ' + args.event)
+    SftpAction.upload_file(config, args.filename)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='we-motion-listener')
 
-    parser.add_argument(
-        '-f', '--filename', help='full path of the file name')
+    parser.add_argument('-f', '--filename', help='full path of the file name')
 
     parser.add_argument('-c', '--config', help='config file',
-                        default='/etc/we-motion/listener/we-motion-listener.cfg')
+                        default='/etc/we-motion-listener/we-motion-listener.cfg')
+
+    parser.add_argument('-v', '--event', help='event number')
 
     args = parser.parse_args()
 
-    handle_event(args.config, args.filename)
+    handle_event(args)
