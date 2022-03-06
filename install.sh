@@ -3,7 +3,7 @@
 # Installs motion-notify and all required dependencies.
 
 # Install git and clone we-motion-listener into the destination directory
-apt-get install git pip-install
+apt-get install git pip
 
 rm -rf /etc/we-motion-listener
 git clone https://github.com/jnteisseire-wesoftit/we-motion-listener /etc/we-motion-listener

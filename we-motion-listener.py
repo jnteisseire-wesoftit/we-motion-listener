@@ -11,7 +11,7 @@ from smtp import SmtpAction
 from sftp import SftpAction
 
 
-def handle_event(config_file, event, movie_file):
+def handle_event(config_file, movie_file):
 
     # Load config file
     config = Config(config_file)
@@ -41,14 +41,12 @@ def handle_event(config_file, event, movie_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='we-motion-listener')
 
-    parser.add_argument('-e', '--event', help='type of motion event', choices=[
-                        'on_event_start', 'on_picture_save', 'on_movie_end'], default='on_movie_end')
     parser.add_argument(
         '-f', '--filename', help='full path of the file name')
 
     parser.add_argument('-c', '--config', help='config file',
-                        default='we-motion-listener.cfg')
+                        default='/etc/we-motion/listener/we-motion-listener.cfg')
 
     args = parser.parse_args()
 
-    handle_event(args.config, args.event, args.filename)
+    handle_event(args.config, args.filename)
