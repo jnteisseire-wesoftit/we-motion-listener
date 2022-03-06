@@ -9,6 +9,7 @@ git clone https://github.com/jnteisseire-wesoftit/we-motion-listener /etc/we-mot
 chown -R motion.motion /etc/we-motion-listener
 chmod +x /etc/we-motion-listener/we-motion-listener.py
 
+pip install python_sftp_client
 
 # Create the log files and lock files and set ownership and permissions
 mkdir -p /var/log/we-motion-listener/
@@ -17,7 +18,7 @@ chown motion.motion /var/log/we-motion-listener/we-motion-listener.log
 chmod 664 /var/log/we-motion-listener/we-motion-listener.log
 
 # Change the File permissions
-sudo chown motion.motion /etc/we-motion-listener/we-motion-listener.py
-sudo chown motion.motion /etc/we-motion-listener/we-motion-listener.cfg
-sudo chmod 744 /etc/we-motion-listener/we-motion-listener.py
-sudo chmod 600 /etc/we-motion-listener/we-motion-listener.cfg
+chown motion.motion /etc/we-motion-listener/we-motion-listener.py
+chown motion.motion /etc/we-motion-listener/we-motion-listener.cfg
+chmod 744 /etc/we-motion-listener/we-motion-listener.py
+chmod 600 /etc/we-motion-listener/we-motion-listener.cfg
