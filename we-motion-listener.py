@@ -24,7 +24,7 @@ def handle_event(args):
     handler = logging.StreamHandler(logging.DEBUG)
 
     if (os.path.exists(config.config_obj.get('General', 'log'))):
-        handler = logging.handlers.RotatingFileHandler('/var/log/motion/mption.log',
+        handler = logging.handlers.RotatingFileHandler('/var/log/motion/motion.log',
                                                        maxBytes=1048576,
                                                        backupCount=3)
     else:
