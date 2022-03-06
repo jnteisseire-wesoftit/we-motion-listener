@@ -14,7 +14,7 @@ chmod +x /etc/we-motion-listener/we-motion-listener.py
 # pip install python_sftp_client
 
 # Create a new ssh key
-mkdir -p /etc/we-motion-listener/.shh
+mkdir -p /etc/we-motion-listener/.ssh
 ssh-keygen -f /etc/we-motion-listener/.ssh/id_rsa -q -P ""
 
 # Create the log files and set ownership and permissions
