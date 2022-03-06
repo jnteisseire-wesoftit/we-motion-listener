@@ -9,6 +9,7 @@ import argparse
 from config import Config
 from smtp import SmtpAction
 from sftp import SftpAction
+from io import StringIO
 
 
 def handle_event(args):
@@ -22,26 +23,29 @@ def handle_event(args):
 
     handler = logging.StreamHandler(logging.DEBUG)
 
-    if (os.path.exists(config.config_obj.get('General', 'log'))):
-        handler = logging.handlers.RotatingFileHandler('/var/log/we-motion-listener/we-motion-listener.log',
-                                                       maxBytes=1048576,
-                                                       backupCount=3)
-    else:
-        handler = logging.StreamHandler(sys.stdout)
+    # if (os.path.exists(config.config_obj.get('General', 'log'))):
+    #    handler = logging.handlers.RotatingFileHandler('/var/log/we-motion-listener/we-motion-listener.log',
+    #                                                   maxBytes = 1048576,
+    #                                                   backupCount = 3)
+    # else:
+    #    handler = logging.StreamHandler(sys.stdout)
+    log_stream = StringIO()
+    handler = logging.StreamHandler(log_stream)
 
     handler.setFormatter(logging.Formatter(
         '[WEMOTIONLISTENER] [%(asctime)s] [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
     handler.setLevel(logging.DEBUG)
     logger.addHandler(handler)
 
-    SmtpAction.send_email(config, 'Motion detected ' + args.event)
     SftpAction.upload_file(config, args.filename)
+    SmtpAction.send_email(config, 'Motion detected ' + log_stream.getValue())
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='we-motion-listener')
 
-    parser.add_argument('-f', '--filename', help='full path of the file name')
+    parser.add_argument('-f', '--filename',
+                        help='full path of the file name')
 
     parser.add_argument('-c', '--config', help='config file',
                         default='/etc/we-motion-listener/we-motion-listener.cfg')
