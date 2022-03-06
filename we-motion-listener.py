@@ -23,22 +23,25 @@ def handle_event(args):
 
     handler = logging.StreamHandler(logging.DEBUG)
 
-    # if (os.path.exists(config.config_obj.get('General', 'log'))):
-    #    handler = logging.handlers.RotatingFileHandler('/var/log/we-motion-listener/we-motion-listener.log',
-    #                                                   maxBytes = 1048576,
-    #                                                   backupCount = 3)
-    # else:
-    #    handler = logging.StreamHandler(sys.stdout)
-    log_stream = StringIO()
-    handler = logging.StreamHandler(log_stream)
+    if (os.path.exists(config.config_obj.get('General', 'log'))):
+        handler = logging.handlers.RotatingFileHandler('/var/log/motion/mption.log',
+                                                       maxBytes=1048576,
+                                                       backupCount=3)
+    else:
+        handler = logging.StreamHandler(sys.stdout)
 
     handler.setFormatter(logging.Formatter(
         '[WEMOTIONLISTENER] [%(asctime)s] [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
     handler.setLevel(logging.DEBUG)
     logger.addHandler(handler)
 
-    SftpAction.upload_file(config, args.filename)
-    SmtpAction.send_email(config, 'Motion detected ' + log_stream.getValue())
+    try:
+        SftpAction.upload_file(config, args.filename)
+        SmtpAction.send_email(
+            config, 'Motion detected ')
+    except Exception as e:
+        SmtpAction.send_email(
+            config, 'Motion detected ' + e.args)
 
 
 if __name__ == '__main__':
