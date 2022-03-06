@@ -7,7 +7,7 @@ apt-get install git pip
 
 rm -rf /etc/we-motion-listener
 mkdir -p /etc/we-motion-listener
-cp -r ../we-motion-listener
+cp -r ../we-motion-listener /etc/
 chown -R motion.motion /etc/we-motion-listener
 chmod +x /etc/we-motion-listener/we-motion-listener.py
 
